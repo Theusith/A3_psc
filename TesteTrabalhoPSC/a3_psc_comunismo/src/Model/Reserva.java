@@ -59,7 +59,6 @@ public class Reserva {
 
     @Override
     public String toString() {
-        return "---------------------------------------" +
-                "\nId = " + idReserva + "\nOrigem: " + origem + "\nDestino: " + destino + "\nData de viagem: " + dataViagem;
+        return "\nId = " + idReserva + "\nOrigem: " + origem + "\nDestino: " + destino + "\nData de viagem: " + dataViagem + "\n--------------";
     }
 }
