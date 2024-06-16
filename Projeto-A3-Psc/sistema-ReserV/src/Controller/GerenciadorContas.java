@@ -7,14 +7,22 @@ import Conexao.Conexao;
 import Model.Cliente;
 import Model.Pessoa;
 
-
+/**
+ * Classe responsável por gerenciar operações relacionadas a usuários do sistema.
+ */
 public class GerenciadorContas {
-
+    /**
+     * Construtor da classe. Adiciona um administrador padrão ao ser instanciada.
+     */
     public GerenciadorContas() {
         adicionarAdministradorPadrao();
 
     }
-
+    /**
+     * Cadastra um novo cliente no sistema.
+     *
+     * @param usuario Objeto Cliente a ser cadastrado.
+     */
     public void cadastrarCliente(Cliente usuario) {
         Connection conn = null;
         PreparedStatement psDados = null;
@@ -69,7 +77,9 @@ public class GerenciadorContas {
             }
         }
     }
-
+    /**
+     * Adiciona um administrador padrão ao sistema, caso não exista.
+     */
     public void adicionarAdministradorPadrao() {
         boolean adicionado = false;
         PreparedStatement stmt = null;
@@ -139,7 +149,13 @@ public class GerenciadorContas {
 
         }
     }
-
+    /**
+     * Autentica uma pessoa no sistema.
+     *
+     * @param email Email da pessoa.
+     * @param senha Senha da pessoa.
+     * @return Objeto Pessoa se autenticado com sucesso, ou null se não encontrado.
+     */
     public Pessoa autenticarPessoa (String email, String senha){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -179,7 +195,12 @@ public class GerenciadorContas {
         }
         return cl; // Pessoa não encontrada ou senha incorreta
     }
-
+    /**
+     * Obtém um cliente do sistema pelo ID.
+     *
+     * @param id ID do cliente a ser obtido.
+     * @return Objeto Cliente se encontrado, ou null se não encontrado.
+     */
     public Cliente obterClientePorId ( int id){
         Cliente cliente = null;
         PreparedStatement stmt = null;
@@ -213,7 +234,11 @@ public class GerenciadorContas {
         }
         return cliente;
     }
-
+    /**
+     * Deleta um cliente do sistema pelo ID.
+     *
+     * @param idCliente ID do cliente a ser deletado.
+     */
     public void deletarClientePorId(int idCliente) {
         String sql = "DELETE FROM usuarios WHERE id = ? AND tipo = 'Cliente'"; // Verifica se é cliente
 
@@ -234,7 +259,12 @@ public class GerenciadorContas {
             // Tratar o erro de forma mais adequada (rollback, log, etc.)
         }
     }
-
+    /**
+     * Altera os dados de um cliente pelo ID.
+     *
+     * @param idCliente  ID do cliente a ser alterado.
+     * @param novosDados Novos dados do cliente.
+     */
     public void alterarClientePorId(int idCliente, Cliente novosDados) {
         String sql = "UPDATE usuarios SET nome = ?, cpf = ?, email = ?, senha = ? WHERE id = ? AND tipo = 'Cliente'";
 
@@ -260,7 +290,11 @@ public class GerenciadorContas {
             // Tratar o erro de forma mais adequada (rollback, log, etc.)
         }
     }
-
+    /**
+     * Lista todos os clientes cadastrados no sistema.
+     *
+     * @return Lista de objetos Cliente.
+     */
     public List<Cliente> visualizarClientes() {
         List<Cliente> clientes = new ArrayList<>();
         String sql = "SELECT * FROM usuarios WHERE tipo = 'Cliente'";
