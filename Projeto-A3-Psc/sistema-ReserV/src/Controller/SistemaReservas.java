@@ -6,19 +6,28 @@ import Model.Reserva;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
 import java.util.Scanner;
-
+/**
+ * Classe que representa um sistema de reservas que permite login, criação de contas,
+ * reserva de viagens, edição e exclusão de reservas, entre outras funcionalidades.
+ */
 public class SistemaReservas {
 
     private GerenciadorContas gerenciadorContas;
     private GerenciadorReservas gerenciadorReservas;
     private Scanner scanner;
-
+    /**
+     * Construtor da classe SistemaReservas. Inicializa os gerenciadores de contas e reservas
+     * e o objeto Scanner para entrada de dados do usuário.
+     */
     public SistemaReservas() {
         this.gerenciadorContas = new GerenciadorContas();
         this.gerenciadorReservas = new GerenciadorReservas();
         this.scanner = new Scanner(System.in);
     }
-
+    /**
+     * Método principal que inicia a execução do sistema, mostrando um menu de opções para o usuário.
+     * Permite fazer login, criar conta ou sair do sistema.
+     */
     public void executar() {
         boolean sair = false;
         while (!sair) {
@@ -45,7 +54,11 @@ public class SistemaReservas {
             }
         }
     }
-
+    /**
+     * Método para realizar o login de um usuário no sistema.
+     * Solicita email e senha, verifica as credenciais e redireciona para o menu adequado
+     * (administrador ou cliente).
+     */
     private void fazerLogin() {
         System.out.println("=== Fazer Login ===");
         System.out.print("Email: ");
@@ -66,7 +79,10 @@ public class SistemaReservas {
             System.out.println("Email ou senha incorretos. Tente novamente.");
         }
     }
-
+    /**
+     * Método para criar uma nova conta de cliente no sistema.
+     * Solicita nome, CPF, email e senha, cria um objeto Cliente e o cadastra no sistema.
+     */
     private void criarConta() {
         System.out.println("=== Criar Conta ===");
         System.out.print("Nome: ");
@@ -83,7 +99,13 @@ public class SistemaReservas {
 
         new GerenciadorContas().cadastrarCliente(l);
     }
-
+    /**
+     * Método para exibir o menu principal de um cliente logado.
+     * Permite criar, visualizar, editar e excluir reservas, além de excluir a própria conta
+     * e fazer logout.
+     *
+     * @param pessoaLogada Objeto Pessoa que representa o cliente logado.
+     */
     private void exibirMenuPrincipal(Pessoa pessoaLogada) {
         boolean sair = false;
         while (!sair) {
@@ -126,6 +148,10 @@ public class SistemaReservas {
         }
     }
 
+    /**
+     * Método para exibir o menu administrador, permitindo alterar dados pessoais de clientes,
+     * exibir suas reservas, excluir contas de clientes, visualizar todos os clientes e fazer logout.
+     */
     private void exibirMenuAdministrador() {
         boolean sair = false;
         while (!sair) {
@@ -171,7 +197,10 @@ public class SistemaReservas {
             }
         }
     }
-
+    /**
+     * Método para alterar os dados pessoais de um cliente específico, identificado pelo ID.
+     * Permite alterar nome, CPF, email e senha do cliente.
+     */
     private void alterarDadosClientePorId() {
         System.out.println("=== Alterar Dados de Cliente ===");
         System.out.print("ID do cliente: ");
@@ -205,7 +234,12 @@ public class SistemaReservas {
 
 
     }
-
+    /**
+     * Método para criar uma nova reserva de viagem para o cliente logado.
+     * Solicita origem, destino e data de viagem da reserva.
+     *
+     * @param pessoaLogada Objeto Pessoa que representa o cliente logado.
+     */
     private void criarNovaReserva(Pessoa pessoaLogada) {
         boolean sair = false;
         while (!sair) {
@@ -231,7 +265,12 @@ public class SistemaReservas {
             }
         }
     }
-
+    /**
+     * Método para editar uma reserva existente do cliente logado.
+     * Permite alterar origem, destino e data de viagem da reserva.
+     *
+     * @param pessoaLogada Objeto Pessoa que representa o cliente logado.
+     */
     private void editarReserva(Pessoa pessoaLogada) {
 
 
@@ -258,7 +297,9 @@ public class SistemaReservas {
 
         return ;
     }
-
+    /**
+     * Método para excluir uma reserva específica do sistema, identificada pelo ID.
+     */
     private void excluirReserva() {
         System.out.println("=== Excluir Reserva ===");
         System.out.print("ID da Reserva: ");
