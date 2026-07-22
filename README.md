@@ -71,7 +71,6 @@ A3_psc/
 Projeto desenvolvido em grupo para a disciplina de Programação de Soluções Computacionais.
 
 - [Matheus Oliveira da Silva Costa](https://github.com/Theusith)
-- *(adicione aqui os nomes/links dos demais integrantes do grupo)*
 
 ## 📚 Aprendizados
 
