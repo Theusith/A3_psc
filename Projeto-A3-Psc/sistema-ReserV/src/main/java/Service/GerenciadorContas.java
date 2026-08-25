@@ -66,52 +66,10 @@ public class GerenciadorContas {
                 try {
                     conn = Conexao.getConexao();
                     conn.setAutoCommit(false); // Desabilita autocommit para transação
-
-                    // Inserção na tabela USUARIO
-                    psDados = conn.prepareStatement(sqlDados, PreparedStatement.RETURN_GENERATED_KEYS);
-                    psDados.setString(1, ps.getNome());
-                    psDados.setString(2, ps.getCpf());
-                    psDados.setString(3, ps.getEmail());
-                    psDados.setString(4, ps.getSenha());
-                    psDados.setString(5, ps.getTipo());
-                    psDados.executeUpdate();
-                    System.out.println("Administrador Cadastrado com sucesso!");
-
-                    conn.commit(); // Commit da transação
-
                 } catch (SQLException e) {
-                    if (conn != null) {
-                        try {
-                            conn.rollback(); // Rollback em caso de erro
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (psDados != null) psDados.close();
-                        if (conn != null) conn.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    throw new RuntimeException(e);
                 }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            // Fechar recursos (ResultSet, PreparedStatement) aqui
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-    /**
+                /**
      * Autentica uma pessoa no sistema.
      *
      * @param email Email da pessoa.
