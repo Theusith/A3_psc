@@ -11,17 +11,36 @@ import java.sql.SQLException;
 /**
  * A classe Conexao fornece métodos estáticos para obter uma conexão com o banco de dados PostgreSQL
  * e criar objetos PreparedStatement para consultas SQL parametrizadas.
+ *
+ * As credenciais são configuradas em tempo de execução pela classe DatabaseConfig,
+ * que lê os valores do application.properties. Isso evita senhas escritas
+ * diretamente no código-fonte.
  */
 public class Conexao {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/sistema_reserv";
-    private static final String USUARIO = "sith";
-    private static final String SENHA = "357753";
+    private static String url = "jdbc:postgresql://localhost:5432/sistema_reserv";
+    private static String usuario = "sith";
+    private static String senha = "";
 
     private static Connection conexao = null;
 
     private Conexao() {
         // Construtor privado para evitar instanciação direta
+    }
+
+    /**
+     * Define as credenciais de conexão. Chamado automaticamente pela
+     * classe DatabaseConfig na inicialização da aplicação Spring Boot.
+     *
+     * @param novaUrl     URL JDBC de conexão.
+     * @param novoUsuario Usuário do banco de dados.
+     * @param novaSenha   Senha do banco de dados.
+     */
+    public static void configurar(String novaUrl, String novoUsuario, String novaSenha) {
+        url = novaUrl;
+        usuario = novoUsuario;
+        senha = novaSenha;
+        conexao = null; // força nova conexão com as credenciais atualizadas
     }
 
     /**
@@ -35,7 +54,7 @@ public class Conexao {
         if (conexao == null || conexao.isClosed()) {
             try {
                 Class.forName("org.postgresql.Driver");
-                conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
+                conexao = DriverManager.getConnection(url, usuario, senha);
             } catch (ClassNotFoundException e) {
                 throw new SQLException("Driver JDBC não encontrado.", e);
             }

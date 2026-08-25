@@ -25,6 +25,13 @@ public class Reserva {
     private String dataViagem;
 
     /**
+     * Construtor vazio, necessário para frameworks como o Spring/Jackson
+     * converterem JSON em objeto automaticamente.
+     */
+    public Reserva() {
+    }
+
+    /**
      * Construtor para criar uma nova reserva.
      *
      * @param idCliente ID do cliente que fez a reserva

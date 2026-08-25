@@ -1,0 +1,6 @@
+server.port=8080
+spring.application.name=sistema-reserv
+
+db.url=jdbc:postgresql://localhost:5432/sistema_reserv
+db.usuario=sith
+db.senha=357753
