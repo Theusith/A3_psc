@@ -2,7 +2,7 @@
  * A classe Main contém o ponto de entrada para a aplicação do sistema de reservas.
  * Ela cria uma instância de SistemaReservas e chama o seu método executar para iniciar a aplicação.
  */
-package Controller;
+package Service;
 public class Main {
     /**
      * O método main é o ponto de entrada para a execução da aplicação Java.

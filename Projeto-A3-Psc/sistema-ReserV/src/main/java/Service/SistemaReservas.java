@@ -1,4 +1,4 @@
-package Controller;
+package Service;
 
 import Model.Cliente;
 import Model.Pessoa;

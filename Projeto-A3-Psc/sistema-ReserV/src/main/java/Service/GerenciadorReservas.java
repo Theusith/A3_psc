@@ -1,4 +1,4 @@
-package Controller;
+package Service;
 
 import Conexao.Conexao;
 import Model.Reserva;
