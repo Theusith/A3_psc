@@ -10,6 +10,14 @@ public class Cliente extends Pessoa {
     private List<Reserva> reservas; // Lista de reservas feitas pelo cliente.
 
     /**
+     * Construtor vazio, necessário para frameworks como o Spring/Jackson
+     * converterem JSON em objeto automaticamente.
+     */
+    public Cliente() {
+        this.reservas = new ArrayList<>();
+    }
+
+    /**
      * Construtor para inicializar um objeto Cliente com nome, CPF, email e senha.
      *
      * @param nome  O nome do cliente.

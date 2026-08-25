@@ -12,6 +12,7 @@ public class Pessoa {
     protected String senha;
     protected String tipo;
     protected String matricula;
+
     /**
      * Obtém o tipo da pessoa.
      * @return Tipo da pessoa.
@@ -41,6 +42,13 @@ public class Pessoa {
      */
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    /**
+     * Construtor vazio, necessário para frameworks como o Spring/Jackson
+     * converterem JSON em objeto automaticamente.
+     */
+    public Pessoa() {
     }
 
     /**

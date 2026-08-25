@@ -29,10 +29,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Driver JDBC do MySQL (confirme se é esse banco mesmo) -->
+        <!-- Driver JDBC do PostgreSQL -->
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
         </dependency>
     </dependencies>
 
@@ -41,6 +41,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>Service.Application</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
