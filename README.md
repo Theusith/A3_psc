@@ -2,7 +2,7 @@
 
 Projeto acadêmico desenvolvido para a disciplina de Programação de Soluções Computacionais (A3), no curso de Análise e Desenvolvimento de Sistemas. O sistema gerencia contas de clientes e reservas de viagem, aplicando conceitos de Programação Orientada a Objetos, persistência de dados em banco relacional e arquitetura em camadas.
 
-## 📋 Sobre o projeto
+# 📋 Sobre o projeto
 
 O sistema nasceu como uma aplicação de console com conexão direta ao banco via JDBC, e foi migrado para uma arquitetura em camadas (Controller → Service → Repository), agora também exposta como uma **API REST** construída com Spring Boot. O modo console original continua disponível como uma segunda forma de interação com o sistema.
 

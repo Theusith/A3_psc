@@ -3,6 +3,8 @@ package Controller;
 import Model.Cliente;
 import Model.Pessoa;
 import Service.GerenciadorContas;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,10 +25,14 @@ public class ContaController {
      * { "nome": "...", "cpf": "...", "email": "...", "senha": "..." }
      */
     @PostMapping
-    public String cadastrar(@RequestBody Cliente cliente) {
+    public ResponseEntity<String> cadastrar(@RequestBody Cliente cliente) {
+        if (cliente.getEmail() == null || cliente.getEmail().isBlank()
+                || cliente.getSenha() == null || cliente.getSenha().isBlank()) {
+            return ResponseEntity.badRequest().body("Email e senha são obrigatórios.");
+        }
         cliente.setTipo("Cliente");
         gerenciadorContas.cadastrarCliente(cliente);
-        return "Cliente cadastrado com sucesso!";
+        return ResponseEntity.status(HttpStatus.CREATED).body("Cliente cadastrado com sucesso!");
     }
 
     /**
@@ -34,8 +40,12 @@ public class ContaController {
      * Busca um cliente pelo ID.
      */
     @GetMapping("/{id}")
-    public Cliente buscarPorId(@PathVariable int id) {
-        return gerenciadorContas.obterClientePorId(id);
+    public ResponseEntity<Cliente> buscarPorId(@PathVariable int id) {
+        Cliente cliente = gerenciadorContas.obterClientePorId(id);
+        if (cliente == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(cliente);
     }
 
     /**
@@ -43,8 +53,8 @@ public class ContaController {
      * Lista todos os clientes cadastrados.
      */
     @GetMapping
-    public List<Cliente> listarTodos() {
-        return gerenciadorContas.visualizarClientes();
+    public ResponseEntity<List<Cliente>> listarTodos() {
+        return ResponseEntity.ok(gerenciadorContas.visualizarClientes());
     }
 
     /**
@@ -52,9 +62,13 @@ public class ContaController {
      * Atualiza os dados de um cliente existente.
      */
     @PutMapping("/{id}")
-    public String atualizar(@PathVariable int id, @RequestBody Cliente novosDados) {
+    public ResponseEntity<String> atualizar(@PathVariable int id, @RequestBody Cliente novosDados) {
+        Cliente existente = gerenciadorContas.obterClientePorId(id);
+        if (existente == null) {
+            return ResponseEntity.notFound().build();
+        }
         gerenciadorContas.alterarClientePorId(id, novosDados);
-        return "Dados atualizados com sucesso!";
+        return ResponseEntity.ok("Dados atualizados com sucesso!");
     }
 
     /**
@@ -62,9 +76,13 @@ public class ContaController {
      * Remove um cliente pelo ID.
      */
     @DeleteMapping("/{id}")
-    public String deletar(@PathVariable int id) {
+    public ResponseEntity<String> deletar(@PathVariable int id) {
+        Cliente existente = gerenciadorContas.obterClientePorId(id);
+        if (existente == null) {
+            return ResponseEntity.notFound().build();
+        }
         gerenciadorContas.deletarClientePorId(id);
-        return "Cliente deletado com sucesso!";
+        return ResponseEntity.ok("Cliente deletado com sucesso!");
     }
 
     /**
@@ -73,8 +91,12 @@ public class ContaController {
      * { "email": "...", "senha": "..." }
      */
     @PostMapping("/login")
-    public Pessoa login(@RequestBody LoginRequest request) {
-        return gerenciadorContas.autenticarPessoa(request.getEmail(), request.getSenha());
+    public ResponseEntity<Pessoa> login(@RequestBody LoginRequest request) {
+        Pessoa pessoa = gerenciadorContas.autenticarPessoa(request.getEmail(), request.getSenha());
+        if (pessoa == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(pessoa);
     }
 
     /**
