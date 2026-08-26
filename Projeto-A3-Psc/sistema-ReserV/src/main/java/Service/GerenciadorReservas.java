@@ -47,8 +47,9 @@ public class GerenciadorReservas {
      * @param idCliente ID do cliente proprietário da reserva.
      * @param idReservas ID da reserva a ser atualizada.
      * @param reservaAtualizada Objeto Reserva com os novos detalhes da reserva.
+     * @return true se a reserva foi encontrada e atualizada, false caso contrário.
      */
-    public void editarReserva(int idCliente, int idReservas, Reserva reservaAtualizada) {
+    public boolean editarReserva(int idCliente, int idReservas, Reserva reservaAtualizada) {
         try {
             boolean sucesso = repository.atualizar(idCliente, idReservas, reservaAtualizada);
             if (sucesso) {
@@ -56,16 +57,19 @@ public class GerenciadorReservas {
             } else {
                 System.out.println("Reserva não encontrada ou não pertence ao cliente.");
             }
+            return sucesso;
         } catch (SQLException e) {
             System.err.println("Erro ao editar reserva: " + e.getMessage());
+            return false;
         }
     }
 
     /**
      * Remove uma reserva de viagem específica do banco de dados com base no ID da reserva.
      * @param idReservas ID da reserva a ser deletada.
+     * @return true se a reserva foi encontrada e removida, false caso contrário.
      */
-    public void deletarReservaPorId(int idReservas) {
+    public boolean deletarReservaPorId(int idReservas) {
         try {
             boolean sucesso = repository.deletarPorId(idReservas);
             if (sucesso) {
@@ -73,16 +77,19 @@ public class GerenciadorReservas {
             } else {
                 System.out.println("Reserva não encontrada.");
             }
+            return sucesso;
         } catch (SQLException e) {
             System.err.println("Erro ao deletar reserva: " + e.getMessage());
+            return false;
         }
     }
 
     /**
      * Remove todas as reservas de viagem associadas a um cliente específico do banco de dados.
      * @param idCliente ID do cliente para o qual todas as reservas devem ser deletadas.
+     * @return true se ao menos uma reserva foi removida, false caso contrário.
      */
-    public void deletarReservasPorCliente(int idCliente) {
+    public boolean deletarReservasPorCliente(int idCliente) {
         try {
             boolean sucesso = repository.deletarPorCliente(idCliente);
             if (sucesso) {
@@ -90,8 +97,10 @@ public class GerenciadorReservas {
             } else {
                 System.out.println("Nenhuma reserva encontrada para o cliente.");
             }
+            return sucesso;
         } catch (SQLException e) {
             System.err.println("Erro ao deletar reservas: " + e.getMessage());
+            return false;
         }
     }
 }

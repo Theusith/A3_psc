@@ -25,14 +25,14 @@ public class ContaController {
      * { "nome": "...", "cpf": "...", "email": "...", "senha": "..." }
      */
     @PostMapping
-    public ResponseEntity<String> cadastrar(@RequestBody Cliente cliente) {
+    public ResponseEntity<?> cadastrar(@RequestBody Cliente cliente) {
         if (cliente.getEmail() == null || cliente.getEmail().isBlank()
                 || cliente.getSenha() == null || cliente.getSenha().isBlank()) {
-            return ResponseEntity.badRequest().body("Email e senha são obrigatórios.");
+            return ResponseEntity.badRequest().body(new ErroResposta("Email e senha são obrigatórios."));
         }
         cliente.setTipo("Cliente");
         gerenciadorContas.cadastrarCliente(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Cliente cadastrado com sucesso!");
+        return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
 
     /**
@@ -40,10 +40,10 @@ public class ContaController {
      * Busca um cliente pelo ID.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable int id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
         Cliente cliente = gerenciadorContas.obterClientePorId(id);
         if (cliente == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResposta("Cliente não encontrado."));
         }
         return ResponseEntity.ok(cliente);
     }
@@ -62,13 +62,13 @@ public class ContaController {
      * Atualiza os dados de um cliente existente.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<String> atualizar(@PathVariable int id, @RequestBody Cliente novosDados) {
+    public ResponseEntity<?> atualizar(@PathVariable int id, @RequestBody Cliente novosDados) {
         Cliente existente = gerenciadorContas.obterClientePorId(id);
         if (existente == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResposta("Cliente não encontrado."));
         }
         gerenciadorContas.alterarClientePorId(id, novosDados);
-        return ResponseEntity.ok("Dados atualizados com sucesso!");
+        return ResponseEntity.ok(novosDados);
     }
 
     /**
@@ -76,13 +76,13 @@ public class ContaController {
      * Remove um cliente pelo ID.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable int id) {
+    public ResponseEntity<?> deletar(@PathVariable int id) {
         Cliente existente = gerenciadorContas.obterClientePorId(id);
         if (existente == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResposta("Cliente não encontrado."));
         }
         gerenciadorContas.deletarClientePorId(id);
-        return ResponseEntity.ok("Cliente deletado com sucesso!");
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -91,10 +91,10 @@ public class ContaController {
      * { "email": "...", "senha": "..." }
      */
     @PostMapping("/login")
-    public ResponseEntity<Pessoa> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         Pessoa pessoa = gerenciadorContas.autenticarPessoa(request.getEmail(), request.getSenha());
         if (pessoa == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErroResposta("Email ou senha inválidos."));
         }
         return ResponseEntity.ok(pessoa);
     }
