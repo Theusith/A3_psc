@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { listarClientes } from '../services/api';
+import { listarClientes, deletarCliente } from '../services/api';
 
 function ListaClientes() {
     const [clientes, setClientes] = useState([]);
@@ -7,6 +7,11 @@ function ListaClientes() {
     const [erro, setErro] = useState(null);
 
     useEffect(() => {
+        carregarClientes();
+    }, []);
+
+    function carregarClientes() {
+        setCarregando(true);
         listarClientes()
             .then((dados) => {
                 setClientes(dados);
@@ -16,7 +21,21 @@ function ListaClientes() {
                 setErro('Não foi possível carregar os clientes. A API está rodando?');
                 setCarregando(false);
             });
-    }, []);
+    }
+
+    async function handleExcluir(id) {
+        const confirmar = window.confirm('Tem certeza que deseja excluir este cliente?');
+        if (!confirmar) {
+            return;
+        }
+
+        const sucesso = await deletarCliente(id);
+        if (sucesso) {
+            carregarClientes();
+        } else {
+            alert('Não foi possível excluir o cliente.');
+        }
+    }
 
     if (carregando) {
         return <p>Carregando...</p>;
@@ -33,6 +52,9 @@ function ListaClientes() {
                 {clientes.map((cliente) => (
                     <li key={cliente.id}>
                         {cliente.nome} — {cliente.email}
+                        <button onClick={() => handleExcluir(cliente.id)}>
+                            Excluir
+                        </button>
                     </li>
                 ))}
             </ul>
