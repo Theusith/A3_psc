@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { cadastrarCliente } from '../services/api';
+import { useState, useEffect } from 'react';
+import { cadastrarCliente, atualizarCliente } from '../services/api';
 
-function FormularioCliente({ aoCadastrar }) {
+function FormularioCliente({ clienteParaEditar, aoSalvar, aoCancelar }) {
     const [formulario, setFormulario] = useState({
         nome: '',
         cpf: '',
@@ -10,6 +10,19 @@ function FormularioCliente({ aoCadastrar }) {
     });
     const [enviando, setEnviando] = useState(false);
     const [mensagem, setMensagem] = useState(null);
+
+    const modoEdicao = Boolean(clienteParaEditar);
+
+    useEffect(() => {
+        if (clienteParaEditar) {
+            setFormulario({
+                nome: clienteParaEditar.nome || '',
+                cpf: clienteParaEditar.cpf || '',
+                email: clienteParaEditar.email || '',
+                senha: '',
+            });
+        }
+    }, [clienteParaEditar]);
 
     function atualizarCampo(evento) {
         const { name, value } = evento.target;
@@ -25,14 +38,19 @@ function FormularioCliente({ aoCadastrar }) {
         setMensagem(null);
 
         try {
-            await cadastrarCliente(formulario);
-            setMensagem({ tipo: 'sucesso', texto: 'Cliente cadastrado com sucesso!' });
-            setFormulario({ nome: '', cpf: '', email: '', senha: '' });
-            if (aoCadastrar) {
-                aoCadastrar();
+            if (modoEdicao) {
+                await atualizarCliente(clienteParaEditar.id, formulario);
+                setMensagem({ tipo: 'sucesso', texto: 'Cliente atualizado com sucesso!' });
+            } else {
+                await cadastrarCliente(formulario);
+                setMensagem({ tipo: 'sucesso', texto: 'Cliente cadastrado com sucesso!' });
+                setFormulario({ nome: '', cpf: '', email: '', senha: '' });
+            }
+            if (aoSalvar) {
+                aoSalvar();
             }
         } catch (erro) {
-            setMensagem({ tipo: 'erro', texto: 'Não foi possível cadastrar o cliente.' });
+            setMensagem({ tipo: 'erro', texto: 'Não foi possível salvar o cliente.' });
         } finally {
             setEnviando(false);
         }
@@ -40,7 +58,7 @@ function FormularioCliente({ aoCadastrar }) {
 
     return (
         <form onSubmit={enviarFormulario}>
-            <h2>Cadastrar cliente</h2>
+            <h2>{modoEdicao ? 'Editar cliente' : 'Cadastrar cliente'}</h2>
 
             <div>
                 <label>Nome</label>
@@ -74,19 +92,25 @@ function FormularioCliente({ aoCadastrar }) {
             </div>
 
             <div>
-                <label>Senha</label>
+                <label>Senha {modoEdicao && '(deixe em branco para manter a atual)'}</label>
                 <input
                     name="senha"
                     type="password"
                     value={formulario.senha}
                     onChange={atualizarCampo}
-                    required
+                    required={!modoEdicao}
                 />
             </div>
 
             <button type="submit" disabled={enviando}>
-                {enviando ? 'Cadastrando...' : 'Cadastrar'}
+                {enviando ? 'Salvando...' : modoEdicao ? 'Atualizar' : 'Cadastrar'}
             </button>
+
+            {modoEdicao && (
+                <button type="button" onClick={aoCancelar}>
+                    Cancelar
+                </button>
+            )}
 
             {mensagem && (
                 <p style={{ color: mensagem.tipo === 'sucesso' ? 'green' : 'red' }}>

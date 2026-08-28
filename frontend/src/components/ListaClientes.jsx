@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { listarClientes, deletarCliente } from '../services/api';
 
-function ListaClientes() {
+function ListaClientes({ aoEditar }) {
     const [clientes, setClientes] = useState([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState(null);
@@ -52,6 +52,9 @@ function ListaClientes() {
                 {clientes.map((cliente) => (
                     <li key={cliente.id}>
                         {cliente.nome} — {cliente.email}
+                        <button onClick={() => aoEditar(cliente)}>
+                            Editar
+                        </button>
                         <button onClick={() => handleExcluir(cliente.id)}>
                             Excluir
                         </button>
