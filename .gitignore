@@ -4,4 +4,5 @@ target/
 *.iml
 Javadoc/
 Javadoc/
+Atividades.md
 application.properties
